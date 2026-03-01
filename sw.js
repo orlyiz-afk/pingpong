@@ -1,10 +1,10 @@
 const CACHE_NAME = 'brick-breaker-v1';
 const urlsToCache = [
-  '/pingpong/',
-  '/pingpong/index.html',
-  '/pingpong/manifest.json',
-  '/pingpong/icon-192.png',
-  '/pingpong/icon-512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {

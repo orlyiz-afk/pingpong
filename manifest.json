@@ -2,7 +2,7 @@
   "name": "Brick Breaker",
   "short_name": "Breaker",
   "description": "A fun brick breaker game with power-ups and combos!",
-  "start_url": "/pingpong/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#111111",
   "theme_color": "#4CAF50",
