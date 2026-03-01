@@ -162,8 +162,8 @@
         <div class="controls">
             <div class="control-group">
                 <span>SPEED:</span>
-                <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="5">
-                <span id="speedVal">5</span>
+                <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="4">
+                <span id="speedVal">4</span>
             </div>
             <div class="control-group">
                 <span>MUSIC:</span>
@@ -245,7 +245,7 @@
     let level = 1;
     let combo = 0;
     let comboTimer = null;
-    let baseSpeed = 5;
+    let baseSpeed = 4;
     let running = false;
     let paused = false;
     let lastTime = 0;
@@ -275,7 +275,8 @@
             gain.connect(audioCtx.destination);
             osc.type = type;
             osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            const vol = type === 'sine' ? 0.08 : 0.06;
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
             osc.start();
             osc.stop(audioCtx.currentTime + dur);
@@ -284,8 +285,33 @@
 
     function playMelody() {
         if (!musicOn) return;
-        const notes = [523, 587, 659, 587, 523, 440, 523, 587, 659, 784, 659, 523];
-        notes.forEach((n, i) => setTimeout(() => playTone(n, 0.12), i * 120));
+        // Chill, pleasant melody - longer and less repetitive
+        const melody = [
+            { n: 392, d: 0.2 },  // G4
+            { n: 440, d: 0.2 },  // A4
+            { n: 494, d: 0.4 },  // B4
+            { n: 0, d: 0.2 },    // rest
+            { n: 392, d: 0.2 },  // G4
+            { n: 330, d: 0.2 },  // E4
+            { n: 392, d: 0.4 },  // G4
+            { n: 0, d: 0.2 },    // rest
+            { n: 330, d: 0.2 },  // E4
+            { n: 294, d: 0.2 },  // D4
+            { n: 330, d: 0.4 },  // E4
+            { n: 0, d: 0.2 },    // rest
+            { n: 294, d: 0.2 },  // D4
+            { n: 262, d: 0.2 },  // C4
+            { n: 294, d: 0.2 },  // D4
+            { n: 330, d: 0.3 },  // E4
+            { n: 392, d: 0.5 },  // G4
+        ];
+        let time = 0;
+        melody.forEach(note => {
+            if (note.n > 0) {
+                setTimeout(() => playTone(note.n, note.d * 0.8, 'sine'), time * 1000);
+            }
+            time += note.d;
+        });
     }
 
     function startMusic() {
@@ -293,7 +319,7 @@
         initAudio();
         if (audioCtx.state === 'suspended') audioCtx.resume();
         playMelody();
-        musicInterval = setInterval(playMelody, 1500);
+        musicInterval = setInterval(playMelody, 5000);
     }
 
     function stopMusic() {
